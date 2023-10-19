@@ -146,7 +146,9 @@ CMakeFiles/U00-E06.dir/main.cpp.obj: C:/Users/Equipo/Documents/Tomi/trabajofinal
   C:/Program\ Files/JetBrains/CLion\ 2023.1.3/bin/mingw/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32/bits/c++io.h \
   C:/Program\ Files/JetBrains/CLion\ 2023.1.3/bin/mingw/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/bits/fstream.tcc \
   C:/Users/Equipo/Documents/Tomi/trabajofinal/trabajofinal_Ec-Ar/HashMap/HashMap.h \
-  C:/Users/Equipo/Documents/Tomi/trabajofinal/trabajofinal_Ec-Ar/HashMap/HashEntry.h
+  C:/Users/Equipo/Documents/Tomi/trabajofinal/trabajofinal_Ec-Ar/HashMap/HashEntry.h \
+  C:/Users/Equipo/Documents/Tomi/trabajofinal/trabajofinal_Ec-Ar/Lista/Lista.h \
+  C:/Users/Equipo/Documents/Tomi/trabajofinal/trabajofinal_Ec-Ar/Lista/nodo.h
 
 
 C:/Program\ Files/JetBrains/CLion\ 2023.1.3/bin/mingw/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/new:
@@ -212,6 +214,8 @@ C:/Program\ Files/JetBrains/CLion\ 2023.1.3/bin/mingw/lib/gcc/x86_64-w64-mingw32
 C:/Program\ Files/JetBrains/CLion\ 2023.1.3/bin/mingw/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/iosfwd:
 
 C:/Program\ Files/JetBrains/CLion\ 2023.1.3/bin/mingw/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/bits/stringfwd.h:
+
+C:/Users/Equipo/Documents/Tomi/trabajofinal/trabajofinal_Ec-Ar/Lista/nodo.h:
 
 C:/Program\ Files/JetBrains/CLion\ 2023.1.3/bin/mingw/lib/gcc/x86_64-w64-mingw32/11.2.0/include/stdint.h:
 
@@ -440,3 +444,5 @@ C:/Program\ Files/JetBrains/CLion\ 2023.1.3/bin/mingw/lib/gcc/x86_64-w64-mingw32
 C:/Users/Equipo/Documents/Tomi/trabajofinal/trabajofinal_Ec-Ar/HashMap/HashMap.h:
 
 C:/Users/Equipo/Documents/Tomi/trabajofinal/trabajofinal_Ec-Ar/HashMap/HashEntry.h:
+
+C:/Users/Equipo/Documents/Tomi/trabajofinal/trabajofinal_Ec-Ar/Lista/Lista.h:

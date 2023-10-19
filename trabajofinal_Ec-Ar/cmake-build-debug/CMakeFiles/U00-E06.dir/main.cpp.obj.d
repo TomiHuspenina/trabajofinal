@@ -144,4 +144,6 @@ CMakeFiles/U00-E06.dir/main.cpp.obj: \
  C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32/bits/c++io.h \
  C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/bits/fstream.tcc \
  C:\Users\Equipo\Documents\Tomi\trabajofinal\trabajofinal_Ec-Ar\HashMap/HashMap.h \
- C:\Users\Equipo\Documents\Tomi\trabajofinal\trabajofinal_Ec-Ar\HashMap/HashEntry.h
+ C:\Users\Equipo\Documents\Tomi\trabajofinal\trabajofinal_Ec-Ar\HashMap/HashEntry.h \
+ C:\Users\Equipo\Documents\Tomi\trabajofinal\trabajofinal_Ec-Ar\Lista/Lista.h \
+ C:\Users\Equipo\Documents\Tomi\trabajofinal\trabajofinal_Ec-Ar\Lista/nodo.h

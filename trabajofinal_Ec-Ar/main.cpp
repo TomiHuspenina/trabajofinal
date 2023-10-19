@@ -7,8 +7,6 @@
 #include "Lista/Lista.h"
 using namespace std;
 
-
-
 int main() {
 
     ifstream archivo(Archivo);
@@ -60,17 +58,15 @@ int main() {
         cout << "deposito 4: " << dep4 << endl;
         cout << "deposito 5: " << dep5 << endl;
 
-        L1->insertar(i, dep1);
-
         n++;
-
+        
     }
 
     cout<<"cantidad de archivos: "<<n<<endl;
 
     archivo.close();
 
-    HashMap<int, string> *H = new HashMap<int, string>(n);
+
 
 
 
