@@ -4,23 +4,30 @@
 #include <fstream>
 #define Archivo "../Inventariado Fisico.csv"
 #include "HashMap/HashMap.h"
+#include "Lista/Lista.h"
 using namespace std;
 
 
 
 int main() {
-    clock_t begin;
-
-    cout << "Comenzando a medir Tiempo\n" << endl;
-
-    begin = clock();
-
 
     ifstream archivo(Archivo);
     string linea;
     char delimitador = ',';
-    string nom[100], ma[100], doc[100];
-    int n=0, i=0;
+    int n=0;
+
+    Lista<int> *L1 = new Lista<int>;
+    Lista<int> *L2 = new Lista<int>;
+    Lista<int> *L3 = new Lista<int>;
+    Lista<int> *L4 = new Lista<int>;
+    Lista<int> *L5 = new Lista<int>;
+    int i=0;
+
+
+
+    clock_t begin;
+    cout << "Comenzando a medir Tiempo\n" << endl;
+    begin = clock();
 
     if (!archivo.is_open()) {
         cerr << "Error al abrir el archivo." << endl;
@@ -53,12 +60,17 @@ int main() {
         cout << "deposito 4: " << dep4 << endl;
         cout << "deposito 5: " << dep5 << endl;
 
+        L1->insertar(i, dep1);
+
+        n++;
+
     }
+
+    cout<<"cantidad de archivos: "<<n<<endl;
+
     archivo.close();
 
-
-
-
+    HashMap<int, string> *H = new HashMap<int, string>(n);
 
 
 
