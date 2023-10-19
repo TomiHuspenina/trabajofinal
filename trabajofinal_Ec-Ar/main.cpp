@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#define Archivo "../hojadeprueba.csv"
+#define Archivo "../Inventariado Fisico.csv"
 #include "HashMap/HashMap.h"
 using namespace std;
 
@@ -32,33 +32,31 @@ int main() {
     while(getline(archivo, linea)){
 
         stringstream stream(linea);
-        string nombre, mail, documento;
+        string grupo, codigo_barras, articulo, dep1, dep2, dep3, dep4, dep5;
 
-        getline(stream, nombre, delimitador);
-        getline(stream, mail, delimitador);
-        getline(stream, documento, delimitador);
-
-        nom[i]=nombre;
-        doc[i]=documento;
-        ma[i]=mail;
+        getline(stream, grupo, delimitador);
+        getline(stream, articulo, delimitador);
+        getline(stream, codigo_barras, delimitador);
+        getline(stream, dep1, delimitador);
+        getline(stream, dep2, delimitador);
+        getline(stream, dep3, delimitador);
+        getline(stream, dep4, delimitador);
+        getline(stream, dep5, delimitador);
 
         cout << "==================" << endl;
-        cout << "nombre: " << nombre << endl;
-        cout << "mail: " << mail << endl;
-        cout << "Documento: " << documento << endl;
+        cout << "grupo: " << grupo << endl;
+        cout << "articulo: " << articulo << endl;
+        cout << "codigo de barras: " << codigo_barras << endl;
+        cout << "deposito 1: " << dep1 << endl;
+        cout << "deposito 2: " << dep2 << endl;
+        cout << "deposito 3: " << dep3 << endl;
+        cout << "deposito 4: " << dep4 << endl;
+        cout << "deposito 5: " << dep5 << endl;
 
-        n+=1;
-        i+=1;
     }
     archivo.close();
 
-    HashMap<string, string> *H = new HashMap<string, string>(n);
 
-    for(i=0; i<n; i++){
-        H->put(nom[i], doc[i]);
-    }
-
-    H->print();
 
 
 
