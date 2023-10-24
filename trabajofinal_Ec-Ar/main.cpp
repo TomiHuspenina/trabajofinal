@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include<string>
 #include<set>
 #define Archivo "../Inventariado Fisico.csv"
 #include "HashMap/HashMap.h"
@@ -9,32 +10,6 @@
 #include "Arbol/ArbolBinario.h"
 using namespace std;
 
-
-int total_art_dif(int& cant_art_dif){
-    cant_art_dif=0;
-    ifstream archivo(Archivo);
-    char delimitador = ',';
-    string linea;
-    std::set<std::string> grupos;
-
-    getline(archivo, linea); //ignorar el encabezado
-
-    while(getline(archivo, linea)){
-
-        std::stringstream lineStream(linea);
-        std::string grupo;
-
-        getline(lineStream, grupo, delimitador);
-        grupos.insert(grupo);
-
-    }
-
-    archivo.close();
-
-    cant_art_dif=grupos.size();
-
-    return cant_art_dif-1;
-}
 
 int total_art(int& cant_total){
 
@@ -45,10 +20,12 @@ int total_art(int& cant_total){
     getline(archivo, linea); //ignorar el encabezado
 
     while(getline(archivo, linea)){
-        cant_total++;
+       cant_total++;
     }
 
-    return cant_total-1;
+    archivo.close();
+
+    return cant_total;
 }
 
 
@@ -76,11 +53,145 @@ int cantDepositos(int& depositos) {
         }
     }
 
+    archivo.close();
+
     return depositos;
 }
 
+void total_art_dif(){
+    int cant_art_dif=0, n;
+    ifstream archivo(Archivo);
+    string linea;
+    char delimitador = ',';
+    if (!archivo.is_open()) {
+        cerr << "Error al abrir el archivo." << endl;
+    }
+    getline(archivo, linea); //ignorar el encabezado
 
-void mostrarCVS(){
+    while(getline(archivo, linea)){
+        stringstream stream(linea);
+        string deposito;
+
+        if(getline(stream,deposito,delimitador)){
+            cant_art_dif=stoi(deposito);
+        }
+
+    }
+
+    cout<<"cantidad de articulos diferentes: "<<cant_art_dif<<endl;
+
+    archivo.close();
+}
+
+void min_stock(int n){
+    cout<<"ingrese la cantidad de productos minimos: "<<endl;
+    cin>>n;
+
+    ifstream archivo(Archivo);
+    string linea;
+    char delimitador = ',';
+
+    if (!archivo.is_open()) {
+        cerr << "Error al abrir el archivo." << endl;
+    }
+    getline(archivo, linea); //ignorar el encabezado
+
+    while(getline(archivo, linea)){
+
+    }
+
+    archivo.close();
+}
+
+void min_stock_depo(int n, int depo){
+    cout<<"ingrese la cantidad de productos minimos: "<<endl;
+    cin>>n;
+    cout<<"ingrese el deposito: "<<endl;
+    cin>>depo;
+
+    ifstream archivo(Archivo);
+    string linea;
+    char delimitador = ',';
+
+    if (!archivo.is_open()) {
+        cerr << "Error al abrir el archivo." << endl;
+    }
+    getline(archivo, linea); //ignorar el encabezado
+
+    while(getline(archivo, linea)){
+
+    }
+
+
+    archivo.close();
+}
+
+void stock_articulo(string articulo){
+    cout<<"ingrese el nombre del articulo: "<<endl;
+    cin>>articulo;
+
+    ifstream archivo(Archivo);
+    string linea;
+    char delimitador = ',';
+
+    if (!archivo.is_open()) {
+        cerr << "Error al abrir el archivo." << endl;
+    }
+    getline(archivo, linea); //ignorar el encabezado
+
+    while(getline(archivo, linea)){
+
+    }
+
+
+    archivo.close();
+}
+
+void stock_articulo_deposito(string articulo, int depo){
+    cout<<"ingrese el nombre del articulo: "<<endl;
+    cin>>articulo;
+    cout<<"ingrese el deposito: "<<endl;
+    cin>>depo;
+
+    ifstream archivo(Archivo);
+    string linea;
+    char delimitador = ',';
+
+    if (!archivo.is_open()) {
+        cerr << "Error al abrir el archivo." << endl;
+    }
+    getline(archivo, linea); //ignorar el encabezado
+
+    while(getline(archivo, linea)){
+
+    }
+
+
+    archivo.close();
+}
+
+void max_stock(int n){
+    cout<<"ingrese la cantidad de productos maximos: "<<endl;
+    cin>>n;
+
+    ifstream archivo(Archivo);
+    string linea;
+    char delimitador = ',';
+
+    if (!archivo.is_open()) {
+        cerr << "Error al abrir el archivo." << endl;
+    }
+    getline(archivo, linea); //ignorar el encabezado
+
+    while(getline(archivo, linea)){
+
+    }
+
+    archivo.close();
+}
+
+
+/*void mostrarCVS(){
 
     ifstream archivo(Archivo);
     string linea;
@@ -105,30 +216,44 @@ void mostrarCVS(){
         cout << "grupo: " << grupo << endl;
         cout << "articulo: " << articulo << endl;
         cout << "codigo de barras: " << codigo_barras << endl;
+
     }
 
     archivo.close();
 
-}
+}*/
 
 
 int main() {
-
-    int depositos, n, m;
+    int depositoss, m, n, depo;
+    string art;
 
     clock_t begin;
     cout << "Comenzando a medir Tiempo\n" << endl;
     begin = clock();
 
-    mostrarCVS();
+    //mostrarCVS();
 
-    cout<<"cantidad de articulos: "<<total_art(n)<<endl;
+    cout<<"cantidad de articulos: "<<total_art(m)<<endl;
 
-    cout<<"cantidad de articulos diferentes: "<<total_art_dif(m)<<endl;
+    total_art_dif();
 
-    cout<<"cantidad de depositos: "<<cantDepositos(depositos)<<endl;
+    cout<<"cantidad de depositos: "<<cantDepositos(depositoss)<<endl;
 
+    cout<<"minimo stock: "<<endl;
+    min_stock(n);
 
+    cout<<"minimo stock en deposito: "<<endl;
+    min_stock_depo(n, depo);
+
+    cout<<"stock de articulo: "<<endl;
+    stock_articulo(art);
+
+    cout<<"stock de deposito: "<<endl;
+    stock_articulo_deposito(art, depo);
+
+    cout<<"maximo stock: "<<endl;
+    min_stock(n);
 
     clock_t end = clock();
 
