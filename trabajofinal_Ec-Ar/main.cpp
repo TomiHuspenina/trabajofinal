@@ -29,7 +29,7 @@ int total_art(int& cant_total){
 }
 
 
-int cantDepositos(int& depositos) {
+int cant_depositos(int& depositos) {
     depositos=0;
     wchar_t delimiter = L',';
     std::wifstream archivo(L"../Inventariado Fisico.csv");
@@ -84,44 +84,71 @@ void total_art_dif(){
 }
 
 void min_stock(int n){
-    cout<<"ingrese la cantidad de productos minimos: "<<endl;
-    cin>>n;
-
     ifstream archivo(Archivo);
-    string linea;
-    char delimitador = ',';
+    string linea, nom_articulo, columnas;
+    int i, cant_columnas=0;
 
-    if (!archivo.is_open()) {
-        cerr << "Error al abrir el archivo." << endl;
-    }
-    getline(archivo, linea); //ignorar el encabezado
-
-    while(getline(archivo, linea)){
-
+    getline(archivo, linea);//encabezado
+    stringstream stream(linea);
+    while(getline(stream, columnas, ',')){
+        cant_columnas++;
     }
 
+    while (getline(archivo, linea)) {
+        stringstream stream_(linea);
+        string palabra;
+        int num = 0, cant_articulos = 0;
+        for (i = 0; i < cant_columnas; i++) {
+            getline(stream_, palabra, ',');
+            if (i == 2) {
+                nom_articulo = palabra;
+            }
+            if (i > 2) {
+                try {
+                    num = stoi(palabra);
+                    if (num > 0) {
+                        cant_articulos += num;
+                    }
+                } catch (const invalid_argument &e) {}
+            }
+        }
+    }
     archivo.close();
 }
 
-void min_stock_depo(int n, int depo){
-    cout<<"ingrese la cantidad de productos minimos: "<<endl;
-    cin>>n;
-    cout<<"ingrese el deposito: "<<endl;
-    cin>>depo;
-
+void min_stock_depo(int n, int depo) {
     ifstream archivo(Archivo);
     string linea;
-    char delimitador = ',';
+    int c;
+    string nom_articulo;
 
     if (!archivo.is_open()) {
         cerr << "Error al abrir el archivo." << endl;
     }
     getline(archivo, linea); //ignorar el encabezado
 
-    while(getline(archivo, linea)){
+    while (getline(archivo, linea)) {
 
+        stringstream stream(linea);
+        string palabra;
+        int cant_articulos = 0;
+
+        for (int i = 0; i < cant_depositos(c)+2; i++) {
+            getline(stream, palabra, ',');
+            if (i == 2) {
+                nom_articulo = palabra;
+            }
+            if (i == depo + 2) {
+                try {
+                    cant_articulos = stoi(palabra);
+                } catch (const invalid_argument &e) {}
+            }
+        }
+        if(cant_articulos<=n){
+            cout<<"nombre del articulo: "<<nom_articulo<<endl;
+            cout<<"cantidad: "<<cant_articulos<<endl;
+        }
     }
-
 
     archivo.close();
 }
@@ -225,7 +252,7 @@ void max_stock(int n){
 
 
 int main() {
-    int depositoss, m, n, depo;
+    int depositos, m, n, depo;
     string art;
 
     clock_t begin;
@@ -236,24 +263,24 @@ int main() {
 
     cout<<"cantidad de articulos: "<<total_art(m)<<endl;
 
-    total_art_dif();
+    //total_art_dif();
 
-    cout<<"cantidad de depositos: "<<cantDepositos(depositoss)<<endl;
+    cout<<"cantidad de depositos: "<<cant_depositos(depositos)<<endl;
 
-    cout<<"minimo stock: "<<endl;
-    min_stock(n);
+    //cout<<"minimo stock: "<<endl;
+    //min_stock(5);
 
     cout<<"minimo stock en deposito: "<<endl;
-    min_stock_depo(n, depo);
+    min_stock_depo(5,3);
 
-    cout<<"stock de articulo: "<<endl;
-    stock_articulo(art);
+    //cout<<"stock de articulo: "<<endl;
+    //stock_articulo(art);
 
-    cout<<"stock de deposito: "<<endl;
-    stock_articulo_deposito(art, depo);
+    //cout<<"stock de deposito: "<<endl;
+    //stock_articulo_deposito(art, depo);
 
-    cout<<"maximo stock: "<<endl;
-    min_stock(n);
+    //cout<<"maximo stock: "<<endl;
+    //min_stock(n);
 
     clock_t end = clock();
 
