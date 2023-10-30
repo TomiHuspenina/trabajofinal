@@ -116,11 +116,22 @@ void min_stock(int n){
     archivo.close();
 }
 
+unsigned int miHashFunc(string clave) { //
+    unsigned int idx = 0;
+    for(int i = 0; i < clave.length(); i++) {
+        idx += clave[i];
+    }
+    cout << "Hash de la clave " << clave << ": " << idx << endl;
+    return idx;
+}
+
 void min_stock_depo(int n, int depo) {
     ifstream archivo(Archivo);
     string linea;
     int c;
     string nom_articulo;
+
+    HashMap<string, int> TH(total_art(c), &miHashFunc);
 
     if (!archivo.is_open()) {
         cerr << "Error al abrir el archivo." << endl;
@@ -145,10 +156,11 @@ void min_stock_depo(int n, int depo) {
             }
         }
         if(cant_articulos<=n){
-            cout<<"nombre del articulo: "<<nom_articulo<<endl;
-            cout<<"cantidad: "<<cant_articulos<<endl;
+            TH.put(nom_articulo, cant_articulos);
         }
     }
+
+    TH.print();
 
     archivo.close();
 }
@@ -198,21 +210,42 @@ void stock_articulo_deposito(string articulo, int depo){
 }
 
 void max_stock(int n){
-    cout<<"ingrese la cantidad de productos maximos: "<<endl;
-    cin>>n;
-
     ifstream archivo(Archivo);
     string linea;
-    char delimitador = ',';
+    int c;
+    string nom_articulo;
+
+    HashMap<string, int> TH(total_art(c), &miHashFunc);
 
     if (!archivo.is_open()) {
         cerr << "Error al abrir el archivo." << endl;
     }
     getline(archivo, linea); //ignorar el encabezado
 
-    while(getline(archivo, linea)){
+    while (getline(archivo, linea)) {
 
+        stringstream stream(linea);
+        string palabra;
+        int cant_articulos = 0, cant_articulos_totales = 0;
+
+        for (int i = 0; i < cant_depositos(c)+2; i++) {
+            getline(stream, palabra, ',');
+            if (i == 2) {
+                nom_articulo = palabra;
+            }
+            if (i >= 3) {
+                try {
+                    cant_articulos = stoi(palabra);
+                    cant_articulos_totales+=cant_articulos;
+                } catch (const invalid_argument &e) {}
+            }
+        }
+        if(cant_articulos>=n){
+            TH.put(nom_articulo, cant_articulos_totales);
+        }
     }
+
+    TH.print();
 
     archivo.close();
 }
@@ -270,8 +303,8 @@ int main() {
     //cout<<"minimo stock: "<<endl;
     //min_stock(5);
 
-    cout<<"minimo stock en deposito: "<<endl;
-    min_stock_depo(5,3);
+    //cout<<"minimo stock en deposito: "<<endl;
+    //min_stock_depo(5,3);
 
     //cout<<"stock de articulo: "<<endl;
     //stock_articulo(art);
@@ -279,8 +312,8 @@ int main() {
     //cout<<"stock de deposito: "<<endl;
     //stock_articulo_deposito(art, depo);
 
-    //cout<<"maximo stock: "<<endl;
-    //min_stock(n);
+    cout<<"maximo stock: "<<endl;
+    max_stock(5);
 
     clock_t end = clock();
 
