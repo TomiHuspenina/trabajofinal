@@ -3,11 +3,9 @@
 #include <sstream>
 #include <fstream>
 #include<string>
-#include<set>
+#include<vector>
 #include <iostream>
 #include <list>
-#include <memory>
-#include <vector>
 #define Archivo "../Inventariado Fisico.csv"
 #include "HashMap/HashMap.h"
 #include "Lista/Lista.h"
@@ -27,6 +25,7 @@ Lista<Item> LeerCVS(){
     ifstream archivo(Archivo);
     string linea;
 
+
     if (!archivo.is_open()) {
         cerr << "Error al abrir el archivo." << endl;
     }
@@ -37,29 +36,29 @@ Lista<Item> LeerCVS(){
     string grupo;
     while(getline(archivo, linea)){
         Item item;
-        std::stringstream stream(linea);
+        std::stringstream stream(linea); // convierte linea en cadena de caracteres
 
         getline(stream, item.grupo, ',');
         if(item.grupo=="") item.grupo = grupo;
-        else grupo =item.grupo;
+        else grupo = item.grupo;
         getline(stream, item.codigo_barras, ',');
         getline(stream, item.articulo, ',');
 
         string var;
         while(getline(stream,var,',')){
             int deposito;
-            try {deposito = std::stoi(var);}
+            try {deposito = std::stoi(var);}  // convertimos el valor del deposito a int
             catch(std::invalid_argument const &e){
                 deposito=0;
             };
-            item.depositos->insertarUltimo(deposito);
+            item.depositos->insertarUltimo(deposito);  //almacenamos los depositos en la lista de depositos
         }
-        datos->insertarUltimo(item);
+        datos->insertarUltimo(item); // almacenamos en una lista todo lo que pertenece a la struct item
     }
 
     archivo.close();
 
-    return *datos;
+    return *datos;  // retornamos la lista con los datos de struct
 }
 
 
@@ -78,22 +77,21 @@ void mostrar_datos(Lista<Item> &lista,bool grupo=false, bool codigo=false, bool 
     int len = lista.getTamanio();
     for (int i=0;i<len;i++) {
         mostrar_item_partes(lista.getDato(i),grupo,codigo,nombre,depositos);
-        std::cout << "=============================" << std::endl; // Separador
+        std::cout <<i+1<< "=============================" << std::endl; // Separador
     }
 }
 
 int total_art(Lista<Item>& datos){
-    // mostrar_datos(datos);
-    return datos.getTamanio();
+    return datos.getTamanio();  //retornamos el tamaño de la lista con todos los datos de la struct item
 }
 
 int total_art_dif(Lista<Item>& datos){
     int total=0;
-    Item articulo;
+    Item item;
     for( int i =0;i<datos.getTamanio();i++){
-        articulo = datos.getDato(i);
-        for(int j = 0;j<articulo.depositos->getTamanio();j++){
-            total+=articulo.depositos->getDato(j);
+        item = datos.getDato(i);
+        for(int j = 0;j<item.depositos->getTamanio();j++){
+            total+=item.depositos->getDato(j);  //suma los numeros de cada deposito
         }
     }
     return total;
@@ -118,8 +116,8 @@ Lista<Item> obtener_min_max_stock(Lista<Item>& datos, int n_stock,bool es_menor,
         return *art_min_stock;
     }
 
-    for( int i =0; i < datos.getTamanio();i++){
-        item= datos.getDato(i);
+    for( int i = 0; i < datos.getTamanio() ; i++){
+        item = datos.getDato(i);
         stock_articulo=0;
 
         if(!todos_depositos){ //Si es que se ha seleccionado un deposito
@@ -198,12 +196,19 @@ int obtener_clave_hash(string codigo){
 }
 
 
-int main() {
+int main(int argc, char **argv) {
 
     clock_t begin;
     cout << "Comenzando a medir Tiempo\n" << endl;
     begin = clock();
 
+    cout<<"cantidad de argumentos: "<<argc<<endl;
+    for(int i=0; i<argc; i++){
+        cout<<"argumento ["<<i<<"] "<<argv[i]<<endl;
+        if(strcmp(argv[i], "-file")==0){
+            cout<<"nombre del archivo: "<<argv[i+1]<<endl;
+        }
+    }
 
     Lista<Item> datos = LeerCVS();
 
@@ -219,9 +224,10 @@ int main() {
     mostrar_datos(datos);
     cout<<endl;
 
+
     int total_art_mostrar = total_art_dif(datos);
-    cout << "Total Art: "<<total_art_mostrar<<endl;
-    cout<<"Total grupos: "<< total_art(datos)<<endl;
+    cout << "Total Articulos: "<<total_art_mostrar<<endl;
+    cout<<"Articulos Diferentes: "<< total_art(datos)<<endl;
     cout<<endl;
 
     int stock_min_ej = 5;
