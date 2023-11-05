@@ -21,6 +21,7 @@ struct Item {
     Lista<int> *depositos = new Lista<int>();
 };
 
+
 Lista<Item> LeerCVS(){
 
     ifstream archivo(Archivo);
@@ -61,13 +62,14 @@ Lista<Item> LeerCVS(){
     return *datos;
 }
 
-void mostrar_item_partes(Item articulo, bool grupo=false, bool codigo=false, bool nombre=false, bool depositos=false){
-    if(grupo) cout<<"Grupo: "<<articulo.grupo<<endl;
-    if(codigo) cout << "Codigo de Barras: " << articulo.codigo_barras << endl;
-    if(nombre) cout << "Articulo: " << articulo.articulo << endl;
+
+void mostrar_item_partes(Item item, bool grupo=false, bool codigo=false, bool nombre=false, bool depositos=false){
+    if(grupo) cout<<"Grupo: "<<item.grupo<<endl;
+    if(codigo) cout << "Codigo de Barras: " << item.codigo_barras << endl;
+    if(nombre) cout << "Articulo: " << item.articulo << endl;
     if(!depositos) return;
-    for(int i = 0;i<articulo.depositos->getTamanio();i++){
-        std::cout<< " D"<<i+1<<": "<< articulo.depositos->getDato(i)<<"|";
+    for(int i = 0;i<item.depositos->getTamanio();i++){
+        std::cout<< " D"<<i+1<<": "<< item.depositos->getDato(i)<<"|";
     }
     cout<<endl;
 }
@@ -195,6 +197,7 @@ int obtener_clave_hash(string codigo){
     return stoi(respuesta);
 }
 
+
 int main() {
 
     clock_t begin;
@@ -204,42 +207,48 @@ int main() {
 
     Lista<Item> datos = LeerCVS();
 
-    HashMap<int, Item> *tabla_hash = new HashMap<int, Item>(datos.getTamanio());
+    /*HashMap<int, Item> *tabla_hash = new HashMap<int, Item>(datos.getTamanio());
     for(int i =0; i<datos.getTamanio();i++){
         Item item = datos.getDato(i);
-        mapa->put(obtener_clave_hash(item.codigo_barras),item);
-    }
-    tabla_hash->print();
+        tabla_hash->put(obtener_clave_hash(item.codigo_barras),item);
+    }*/
 
-    return 1;
+    string articulo_ej="GVB-ZBAJOPIL-BLANCO";
 
     cout << "Datos :"<<endl;
     mostrar_datos(datos);
+    cout<<endl;
 
     int total_art_mostrar = total_art_dif(datos);
     cout << "Total Art: "<<total_art_mostrar<<endl;
     cout<<"Total grupos: "<< total_art(datos)<<endl;
+    cout<<endl;
 
     int stock_min_ej = 5;
     Lista<Item> min_stock = obtener_min_max_stock(datos,stock_min_ej,true);
     cout<< "Articulos Con Stock menor que "<<stock_min_ej<<": "<<endl;
     mostrar_datos(min_stock,false,false,true,true);
+    cout<<endl;
 
     int n_deposito_ej= 3;
     Lista<Item> min_stock_deposito_3 = obtener_min_max_stock(datos,stock_min_ej,true,n_deposito_ej);
     cout<<"Articulos Stock <= "<<stock_min_ej<<" en el dep :"<<n_deposito_ej<<endl;
     mostrar_datos(min_stock_deposito_3,false,false,true,true);
+    cout<<endl;
 
     int stock_ = stock(datos,articulo_ej,true);
     cout<<"Stock de "<<articulo_ej<<" : "<<stock_<<endl;
+    cout<<endl;
 
     int stock_deposito = stock(datos,articulo_ej,true,n_deposito_ej);
     cout<<"Stock de "<<articulo_ej<<" en Dep 3: "<<stock_deposito<<endl;
+    cout<<endl;
 
     int stock_max_ej=5;
     Lista<Item> max_stock = obtener_min_max_stock(datos,stock_max_ej,false);
-    cout<< "Articulos Con Stock mayor que "<<stock_min_ej<<": "<<endl;
+    cout<< "Articulos Con Stock mayor o igual que "<<stock_max_ej<<": "<<endl;
     mostrar_datos(max_stock,0,0,1,1);
+    cout<<endl;
 
 
 
