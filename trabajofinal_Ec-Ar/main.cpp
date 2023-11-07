@@ -8,6 +8,7 @@
 #include <list>
 #define Archivo "../Inventariado Fisico.csv"
 #include "HashMap/HashMap.h"
+#include "HashMapList/HashMapList.h"
 #include "Lista/Lista.h"
 #include "Arbol/ArbolBinario.h"
 using namespace std;
@@ -155,7 +156,14 @@ Item obtener_articulo_nombre(Lista<Item>& datos, string nombre_articulo){
 
 }
 int stock(Lista<Item>& datos, string nombre_articulo, bool codigo_barras,int n_deposito=-1){
-    Item articulo =  codigo_barras?obtener_articulo_codigo(datos,nombre_articulo):obtener_articulo_nombre(datos,nombre_articulo);
+    Item articulo;
+    if(codigo_barras){
+        articulo = obtener_articulo_codigo(datos, nombre_articulo);
+    }else{
+        articulo = obtener_articulo_nombre(datos, nombre_articulo);
+    }
+
+
     if(articulo.articulo == "Error"){ // No existe el articulo
         cout<<"Articulo no Encontrado"<<endl;
         return -1;
@@ -165,7 +173,7 @@ int stock(Lista<Item>& datos, string nombre_articulo, bool codigo_barras,int n_d
         int stock=0;
 
         for(int i=0; i<articulo.depositos->getTamanio(); i++){
-            stock+=articulo.depositos->getDato(i);
+            stock+=articulo.depositos->getDato(i);  //sumamos el stock
         }
         return stock;
     }
@@ -202,32 +210,93 @@ int main(int argc, char **argv) {
     cout << "Comenzando a medir Tiempo\n" << endl;
     begin = clock();
 
+
+    Lista<Item> datos = LeerCVS();
+    string articulo_ej="GVB-ZBAJOPIL-BLANCO";
+    /*
+    cout << "Datos :"<<endl;
+    mostrar_datos(datos, true, true, true, true);
+    cout<<endl; */
+
+    
     cout<<"cantidad de argumentos: "<<argc<<endl;
     for(int i=0; i<argc; i++){
         cout<<"argumento ["<<i<<"] "<<argv[i]<<endl;
         if(strcmp(argv[i], "-file")==0){
-            cout<<"nombre del archivo: "<<argv[i+1]<<endl;
+            cout<<"nombre del archivo: "<<argv[i+1]<<argv[i+2]<<endl;
+        }
+        if(strcmp(argv[i+3],"-total_art_dif")==0){
+            total_art_dif(datos);
+        }
+        if(strcmp(argv[i+3],"-total_art")==0){
+            total_art(datos);
+        }
+        if(strcmp(argv[i+3],"-min_stock")==0){
+
+            int num_stock;
+            num_stock=std::stoi(argv[i+4]);
+
+            if(num_stock>=0){
+                Lista<Item> min_stock = obtener_min_max_stock(datos,num_stock,true);
+                mostrar_datos(min_stock,false,false,true,true);
+            }else{
+                cerr<<"numero no valido"<<endl;
+                return 1;
+            }
+
+            int num_dep;
+            num_dep=std::stoi(argv[i+5]);
+
+            if(num_stock>=0 && num_dep>0 && num_dep<=5){
+                Lista<Item> min_stock_deposito = obtener_min_max_stock(datos,num_stock,true,num_dep);
+                mostrar_datos(min_stock_deposito,false,false,true,true);
+            }else{
+                cerr<<"numero no valido"<<endl;
+            }
+
+        }
+        if(strcmp(argv[i+3],"-stock")==0){
+
+            Item item;
+            for(int i =0; i<datos.getTamanio();i++){
+                item=datos.getDato(i);
+            if (codigo_barra.compare(item.codigo_barras) ==0){
+
+             }
+            }
+
+            int stock_ = stock(datos,articulo_ej,true);
+            cout<<"Stock de "<<articulo_ej<<" : "<<stock_<<endl;
+
+        }
+        if(strcmp(argv[i+3],"-max_Stock")==0){
+
+            int num_stock;
+            num_stock=std::stoi(argv[i+4]);
+
+            if(num_stock>=0){
+                Lista<Item> max_stock = obtener_min_max_stock(datos,num_stock,false);
+                mostrar_datos(max_stock,false,false,true,true);
+            }else{
+                cerr<<"numero no valido"<<endl;
+                return 1;
+            }
         }
     }
 
-    Lista<Item> datos = LeerCVS();
 
-    /*HashMap<int, Item> *tabla_hash = new HashMap<int, Item>(datos.getTamanio());
+    /*
+    HashMapList<int, Item> *tabla_hash = new HashMapList<int, Item>(datos.getTamanio());
     for(int i =0; i<datos.getTamanio();i++){
         Item item = datos.getDato(i);
         tabla_hash->put(obtener_clave_hash(item.codigo_barras),item);
-    }*/
-
-    string articulo_ej="GVB-ZBAJOPIL-BLANCO";
-
-    cout << "Datos :"<<endl;
-    mostrar_datos(datos);
+    }
+    tabla_hash->print();
+    */
+    
+    cout<<"cantidad de articulos: "<<total_art_dif(datos)<<endl;
     cout<<endl;
-
-
-    int total_art_mostrar = total_art_dif(datos);
-    cout << "Total Articulos: "<<total_art_mostrar<<endl;
-    cout<<"Articulos Diferentes: "<< total_art(datos)<<endl;
+    cout<<"cantidad de articulos diferentes: "<<total_art(datos)<<endl;
     cout<<endl;
 
     int stock_min_ej = 5;
@@ -253,7 +322,7 @@ int main(int argc, char **argv) {
     int stock_max_ej=5;
     Lista<Item> max_stock = obtener_min_max_stock(datos,stock_max_ej,false);
     cout<< "Articulos Con Stock mayor o igual que "<<stock_max_ej<<": "<<endl;
-    mostrar_datos(max_stock,0,0,1,1);
+    mostrar_datos(max_stock,false,false,true,true);
     cout<<endl;
 
 
