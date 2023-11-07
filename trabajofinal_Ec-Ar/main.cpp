@@ -6,7 +6,7 @@
 #include<vector>
 #include <iostream>
 #include <list>
-#define Archivo "../Inventariado Fisico.csv"
+#define Archivo "C:/Users/Tomi/Documents/TOMI/trabajofinal/trabajofinal_Ec-Ar/Inventariado Fisico.csv"
 #include "HashMap/HashMap.h"
 #include "HashMapList/HashMapList.h"
 #include "Lista/Lista.h"
@@ -28,7 +28,7 @@ Lista<Item> LeerCVS(){
 
 
     if (!archivo.is_open()) {
-        cerr << "Error al abrir el archivo..." << endl;
+        cerr << "Error al abrir el archivo." << endl;
     }
 
     getline(archivo, linea);
@@ -213,10 +213,6 @@ int main(int argc, char **argv) {
 
     Lista<Item> datos = LeerCVS();
     string articulo_ej="GVB-ZBAJOPIL-BLANCO";
-    /*
-    cout << "Datos :"<<endl;
-    mostrar_datos(datos, true, true, true, true);
-    cout<<endl; */
 
     
     cout<<"cantidad de argumentos: "<<argc<<endl;
@@ -231,40 +227,44 @@ int main(int argc, char **argv) {
     }
     if(strcmp(argv[1],"-min_stock")==0){
 
-        int num_stock;
-        num_stock=std::stoi(argv[2]);
+        if(argv[3]==""){
+            int num_stock;
+            num_stock=std::stoi(argv[2]);
 
-        if(num_stock>=0){
-            Lista<Item> min_stock = obtener_min_max_stock(datos,num_stock,true);
-            mostrar_datos(min_stock,false,false,true,true);
+            if(num_stock>=0){
+                Lista<Item> min_stock = obtener_min_max_stock(datos,num_stock,true);
+                mostrar_datos(min_stock,false,false,true,true);
+            }else{
+                cerr<<"numero no valido"<<endl;
+                return 1;
+            }
         }else{
-            cerr<<"numero no valido"<<endl;
-            return 1;
+            int num_dep, num_stock;
+            num_stock=std::stoi(argv[2]);
+            num_dep=std::stoi(argv[3]);
+
+            if(num_stock>=0 && num_dep>0 && num_dep<item.depositos->getTamanio()){
+                Lista<Item> min_stock_deposito = obtener_min_max_stock(datos,num_stock,true,num_dep);
+                mostrar_datos(min_stock_deposito,false,false,true,true);
+            }else{
+                cerr<<"numero no valido"<<endl;
+            }
         }
 
-        int num_dep;
-        num_dep=std::stoi(argv[2]);
-
-        if(num_stock>=0 && num_dep>0 && num_dep<item.depositos->getTamanio()){
-            Lista<Item> min_stock_deposito = obtener_min_max_stock(datos,num_stock,true,num_dep);
-            mostrar_datos(min_stock_deposito,false,false,true,true);
-        }else{
-            cerr<<"numero no valido"<<endl;
-        }
 
     }
     if(strcmp(argv[1],"-stock")==0){
 
         for(int i =0; i<datos.getTamanio();i++){
             item=datos.getDato(i);
-            if (argv[i+4]==item.articulo){
+            if (argv[2]==item.articulo){
                 int stock_ = stock(datos,item.articulo,true);
                 cout<<"Stock de "<<item.articulo<<" : "<<stock_<<endl;
                 break;
             }
             int num_dep;
-            num_dep=std::stoi(argv[i+5]);
-            if (argv[i+4]==item.articulo && num_dep>0 && num_dep<item.depositos->getTamanio()){
+            num_dep=std::stoi(argv[3]);
+            if (argv[2]==item.articulo && num_dep>0 && num_dep<item.depositos->getTamanio()){
                 int stock_deposito = stock(datos,item.articulo,true,num_dep);
                 cout<<"Stock de "<<item.articulo<<" en Dep 3: "<<stock_deposito<<endl;
                 break;
@@ -273,7 +273,7 @@ int main(int argc, char **argv) {
         }
 
     }
-    if(strcmp(argv[1],"-max_Stock")==0){
+    if(strcmp(argv[1],"-max_stock")==0){
 
         int num_stock;
         num_stock=std::stoi(argv[2]);
@@ -295,10 +295,10 @@ int main(int argc, char **argv) {
         tabla_hash->put(obtener_clave_hash(item.codigo_barras),item);
     }
     tabla_hash->print();
-    */
 
-    /*
-    cout<<"cantidad de depositos: "<<item.depositos->getTamanio()<<" joder"<<endl;
+    cout << "Datos :"<<endl;
+    mostrar_datos(datos, true, true, true, true);
+    cout<<endl;
     
     cout<<"cantidad de articulos: "<<total_art_dif(datos)<<endl;
     cout<<endl;
