@@ -278,4 +278,3 @@ Esta función, obtener_articulo_nombre, busca un artículo en una lista de artí
      }
 
 
-
