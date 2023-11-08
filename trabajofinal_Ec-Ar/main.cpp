@@ -3,11 +3,8 @@
 #include <sstream>
 #include <fstream>
 #include<string>
-#include<vector>
-#include <iostream>
 #include <list>
-#define Archivo "C:/Users/Tomi/Documents/TOMI/trabajofinal/trabajofinal_Ec-Ar/Inventariado Fisico.csv"
-#include "HashMap/HashMap.h"
+#define Archivo "Inventariado Fisico.csv"
 #include "HashMapList/HashMapList.h"
 #include "Lista/Lista.h"
 #include "Arbol/ArbolBinario.h"
@@ -64,14 +61,14 @@ Lista<Item> LeerCVS(){
 
 
 void mostrar_item_partes(Item item, bool grupo=false, bool codigo=false, bool nombre=false, bool depositos=false){
-    if(grupo) cout<<"Grupo: "<<item.grupo<<endl;
-    if(codigo) cout << "Codigo de Barras: " << item.codigo_barras << endl;
-    if(nombre) cout << "Articulo: " << item.articulo << endl;
+    if(grupo) std::cout<<"Grupo: "<<item.grupo<<endl;
+    if(codigo) std::cout << "Codigo de Barras: " << item.codigo_barras << endl;
+    if(nombre) std::cout << "Articulo: " << item.articulo << endl;
     if(!depositos) return;
     for(int i = 0;i<item.depositos->getTamanio();i++){
         std::cout<< " D"<<i+1<<": "<< item.depositos->getDato(i)<<"|";
     }
-    cout<<endl;
+    std::cout<<endl;
 }
 
 void mostrar_datos(Lista<Item> &lista,bool grupo=false, bool codigo=false, bool nombre= false, bool depositos=false){
@@ -103,12 +100,12 @@ bool esta_el_articulo_dentro_del_stock_seleccionado(int stock_articulo,int stock
     return stock_articulo >= stock_seleccionado;
 }
 
-Lista<Item> obtener_min_max_stock(Lista<Item>& datos, int n_stock,bool es_menor, int n_deposito=-1){
+Lista<Item> obtener_min_max_stock(Lista<Item>& datos, int n_stock,bool es_menor, int n_deposito=-1){ //si es -1 no se ha escogido un deposito
     Item item;
     Lista<Item> *art_min_stock = new Lista<Item>();
     int stock_articulo;
 
-    bool todos_depositos = n_deposito==-1;
+    bool todos_depositos = (n_deposito==-1);
 
     bool depositoSeleccionado_fuera= datos.getDato(0).depositos->getTamanio()<= n_deposito;
     if(!todos_depositos &&depositoSeleccionado_fuera ){ // No se puede escoger ese numero de deposito
@@ -163,9 +160,8 @@ int stock(Lista<Item>& datos, string nombre_articulo, bool codigo_barras,int n_d
         articulo = obtener_articulo_nombre(datos, nombre_articulo);
     }
 
-
     if(articulo.articulo == "Error"){ // No existe el articulo
-        cout<<"Articulo no Encontrado"<<endl;
+        std::cout<<"Articulo no Encontrado"<<endl;
         return -1;
     }
     bool todos_depositos = n_deposito==-1;
@@ -207,138 +203,74 @@ int obtener_clave_hash(string codigo){
 int main(int argc, char **argv) {
 
     clock_t begin;
-    cout << "Comenzando a medir Tiempo\n" << endl;
+    std::cout << "Comenzando a medir Tiempo\n" << endl;
     begin = clock();
+
 
 
     Lista<Item> datos = LeerCVS();
     string articulo_ej="GVB-ZBAJOPIL-BLANCO";
 
-    
-    cout<<"cantidad de argumentos: "<<argc<<endl;
+
+    std::cout<<"cantidad de argumentos: "<<argc<<endl;
     Item item;
 
-    cout<<"argumento 1: "<<argv[0]<<endl;
+    std::cout<<"argumento 1: "<<argv[0]<<endl;
+
     if(strcmp(argv[1],"-total_art_dif")==0){
-        total_art_dif(datos);
+        cout<<"Total: "<<total_art_dif(datos)<<endl;
     }
+
     if(strcmp(argv[1],"-total_art")==0){
-        total_art(datos);
+        cout<<"Total: "<<total_art(datos)<<endl;
     }
+
     if(strcmp(argv[1],"-min_stock")==0){
+        int num_stock=std::stoi(argv[2]);
+        int num_dep=-1;
 
-        if(argv[3]==""){
-            int num_stock;
-            num_stock=std::stoi(argv[2]);
-
-            if(num_stock>=0){
-                Lista<Item> min_stock = obtener_min_max_stock(datos,num_stock,true);
-                mostrar_datos(min_stock,false,false,true,true);
-            }else{
-                cerr<<"numero no valido"<<endl;
-                return 1;
-            }
-        }else{
-            int num_dep, num_stock;
-            num_stock=std::stoi(argv[2]);
+        if(argc==4){
             num_dep=std::stoi(argv[3]);
-
-            if(num_stock>=0 && num_dep>0 && num_dep<item.depositos->getTamanio()){
-                Lista<Item> min_stock_deposito = obtener_min_max_stock(datos,num_stock,true,num_dep);
-                mostrar_datos(min_stock_deposito,false,false,true,true);
-            }else{
-                cerr<<"numero no valido"<<endl;
-            }
         }
-
-
+        if(num_stock<0 || num_dep< -2 || (num_dep!=-1 && num_dep<item.depositos->getTamanio())){
+            cerr<<"numero no valido"<<endl;
+            return 1;
+        }
+        Lista<Item> min_stock_deposito = obtener_min_max_stock(datos,num_stock,true,num_dep);
+        mostrar_datos(min_stock_deposito,false,false,true,true);
     }
+
     if(strcmp(argv[1],"-stock")==0){
-
-        for(int i =0; i<datos.getTamanio();i++){
-            item=datos.getDato(i);
-            if (argv[2]==item.articulo){
-                int stock_ = stock(datos,item.articulo,true);
-                cout<<"Stock de "<<item.articulo<<" : "<<stock_<<endl;
-                break;
-            }
-            int num_dep;
-            num_dep=std::stoi(argv[3]);
-            if (argv[2]==item.articulo && num_dep>0 && num_dep<item.depositos->getTamanio()){
-                int stock_deposito = stock(datos,item.articulo,true,num_dep);
-                cout<<"Stock de "<<item.articulo<<" en Dep 3: "<<stock_deposito<<endl;
-                break;
-            }
-
-        }
+        string nom_articulo = argv[2];
+        int num_deposito = -1;
+        if(argc==4) num_deposito = std::stoi(argv[3]);
+        int stock_ = stock(datos,nom_articulo,false,num_deposito);
+        cout<<"Stock :"<<stock_<<endl;
 
     }
     if(strcmp(argv[1],"-max_stock")==0){
 
         int num_stock;
         num_stock=std::stoi(argv[2]);
-
-        if(num_stock>=0){
-            Lista<Item> max_stock = obtener_min_max_stock(datos,num_stock,false);
-            mostrar_datos(max_stock,false,false,true,true);
-        }else{
+        int num_dep =-1;
+        if(argc==4){
+            num_dep=std::stoi(argv[3]);
+        }
+        if(num_stock<0 || num_dep< -2 || (num_dep!=-1 && num_dep<item.depositos->getTamanio())){
             cerr<<"numero no valido"<<endl;
             return 1;
         }
+        Lista<Item> max_stock = obtener_min_max_stock(datos,num_stock,false,num_dep);
+        mostrar_datos(max_stock,false,false,true,true);
     }
-
-
-    /*
-    HashMapList<int, Item> *tabla_hash = new HashMapList<int, Item>(datos.getTamanio());
-    for(int i =0; i<datos.getTamanio();i++){
-        Item item = datos.getDato(i);
-        tabla_hash->put(obtener_clave_hash(item.codigo_barras),item);
-    }
-    tabla_hash->print();
-
-    cout << "Datos :"<<endl;
-    mostrar_datos(datos, true, true, true, true);
-    cout<<endl;
-    
-    cout<<"cantidad de articulos: "<<total_art_dif(datos)<<endl;
-    cout<<endl;
-    cout<<"cantidad de articulos diferentes: "<<total_art(datos)<<endl;
-    cout<<endl;
-
-    int stock_min_ej = 5;
-    Lista<Item> min_stock = obtener_min_max_stock(datos,stock_min_ej,true);
-    cout<< "Articulos Con Stock menor que "<<stock_min_ej<<": "<<endl;
-    mostrar_datos(min_stock,false,false,true,true);
-    cout<<endl;
-
-    int n_deposito_ej= 3;
-    Lista<Item> min_stock_deposito_3 = obtener_min_max_stock(datos,stock_min_ej,true,n_deposito_ej);
-    cout<<"Articulos Stock <= "<<stock_min_ej<<" en el dep :"<<n_deposito_ej<<endl;
-    mostrar_datos(min_stock_deposito_3,false,false,true,true);
-    cout<<endl;
-
-    int stock_ = stock(datos,articulo_ej,true);
-    cout<<"Stock de "<<articulo_ej<<" : "<<stock_<<endl;
-    cout<<endl;
-
-    int stock_deposito = stock(datos,articulo_ej,true,n_deposito_ej);
-    cout<<"Stock de "<<articulo_ej<<" en Dep 3: "<<stock_deposito<<endl;
-    cout<<endl;
-
-    int stock_max_ej=5;
-    Lista<Item> max_stock = obtener_min_max_stock(datos,stock_max_ej,false);
-    cout<< "Articulos Con Stock mayor o igual que "<<stock_max_ej<<": "<<endl;
-    mostrar_datos(max_stock,false,false,true,true);
-    cout<<endl;
-    */
 
 
 
     clock_t end = clock();
 
     double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
-    cout<<" "<<endl;
-    cout << "Tardo elapsed_secs  " << elapsed_secs << "\n" << std::endl;
+    std::cout<<" "<<endl;
+    std::cout << "Tardo elapsed_secs  " << elapsed_secs << "\n" << std::endl;
     return 0;
 
 }
