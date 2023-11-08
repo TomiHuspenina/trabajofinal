@@ -1,0 +1,3 @@
+C:/Users/Tomi/Documents/TOMI/trabajofinal/trabajofinal_Ec-Ar/cmake-build-debug/CMakeFiles/U00-E06.dir
+C:/Users/Tomi/Documents/TOMI/trabajofinal/trabajofinal_Ec-Ar/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Tomi/Documents/TOMI/trabajofinal/trabajofinal_Ec-Ar/cmake-build-debug/CMakeFiles/rebuild_cache.dir
